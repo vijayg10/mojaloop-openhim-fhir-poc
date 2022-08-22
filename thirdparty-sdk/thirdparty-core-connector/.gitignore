@@ -1,0 +1,13 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/build
+.swp
+.vscode
+.env
+junit.xml
+coverage
+
+# Ignore *.env files unless we want to explicitly add them.
+**/*.env

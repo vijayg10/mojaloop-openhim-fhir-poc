@@ -1,0 +1,505 @@
+[
+  {
+    "ruleId": 2,
+    "priority": 1,
+    "description": "patch /consentRequests/{ID}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "123456",
+          "path": "authToken"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consentRequests/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "patch"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "scripts": {
+          "exec": [
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString()",
+            "const consentRequestId = pm.request.url.path[1]",
+            "const consentRequest = {",
+            "  url: userConfig.CALLBACK_ENDPOINT + '/consents',",
+            "  method: 'post',",
+            "  header: {",
+            "    'FSPIOP-Source': 'switch',",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "      \"status\": \"ISSUED\",",
+            "      \"consentId\": \"8e34f91d-d078-4077-8263-2c047876fcf6\",",
+            "      \"consentRequestId\": consentRequestId,",
+            "      \"scopes\": [{",
+            "          \"address\": \"some-id\",",
+            "          \"actions\": [",
+            "            \"ACCOUNTS_GET_BALANCE\",",
+            "            \"ACCOUNTS_TRANSFER\"",
+            "          ]",
+            "        }",
+            "      ]",
+            "    })",
+            "  }",
+            "}",
+            "pm.sendRequest(consentRequest, function (err, response) {",
+            "console.log('consent response : '+JSON.stringify(response.json()))",
+            "});"
+          ]
+        }
+      },
+      "type": "MOCK_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 3,
+    "priority": 1,
+    "description": "patch /consentRequests/{ID} - error returned",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "654321",
+          "path": "authToken"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consentRequests/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "patch"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "scripts": {
+          "exec": [
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString()",
+            "const consentRequestId = pm.request.url.path[1]",
+            "const consentRequest = {",
+            "  url: userConfig.CALLBACK_ENDPOINT + '/consentRequests/' + consentRequestId + '/error',",
+            "  method: 'put',",
+            "  header: {",
+            "    'FSPIOP-Source': 'switch',",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "      \"errorInformation\": {",
+            "        \"errorCode\": \"7000\",",
+            "        \"errorDescription\": \"Generic thirdparty error\"",
+            "      }",
+            "    })",
+            "  }",
+            "}",
+            "pm.sendRequest(consentRequest, function (err, response) {",
+            "console.log('consent response : '+JSON.stringify(response.json()))",
+            "});"
+          ]
+        }
+      },
+      "type": "MOCK_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 4,
+    "priority": 1,
+    "description": "put /thirdpartyRequests/authorizations/{ID}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/thirdpartyRequests/authorizations/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "put"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {},
+        "statusCode": "200",
+        "scripts": {
+          "exec": [
+            "",
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString();",
+            "const url = 'http://inbound-thirdparty-sdk:4005/thirdpartyRequests/transactions/b51ec534-ee48-4575-b6a9-ead2955b8069'",
+            "console.log('url:'+ url)",
+            "const patchThirdpartyRequestIDTransactionReq = {",
+            "  url,",
+            "  method: 'PATCH',",
+            "  header: {",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate,",
+            "    'FSPIOP-Source': 'switch'",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "    \"transactionId\": \"c51ec534-ee48-4575-b6a9-ead2955b8069\",",
+            "    \"transactionRequestState\": \"ACCEPTED\",",
+            "    \"transactionState\": \"COMPLETED\"",
+            "    })",
+            "  }",
+            "}",
+            "  ",
+            "pm.sendRequest(patchThirdpartyRequestIDTransactionReq, function (err, resp) {",
+            "  console.error('PATCH /thirdpartyRequests/transactions/{ID} response')",
+            "  console.error(resp.json())",
+            "  console.error(err)",
+            "})"
+          ]
+        },
+        "delay": 0
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 5,
+    "priority": 1,
+    "description": "put /thirdpartyRequests/transactions/{ID}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "pathParams",
+          "operator": "equal",
+          "value": "b51ec534-ee48-4575-b6a9-ead2955b8069",
+          "path": "ID"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/thirdpartyRequests/transactions/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "put"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "scripts": {
+          "scriptingEngine": "javascript"
+        },
+        "statusCode": "200"
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 11,
+    "priority": 1,
+    "description": "put /consents/{ID}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "credential id: identifier of pair of keys, base64 encoded, min length 59",
+          "path": "credential.fidoPayload.id"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consents/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "put"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {},
+        "statusCode": "202",
+        "scripts": {
+          "exec": [
+            "",
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString();",
+            "const consentId = pm.request.url.path[1]",
+            "const url = 'http://inbound-thirdparty-sdk:4005/consents/' + consentId",
+            "console.log('url:'+ url)",
+            "const patchConsentsIDReq = {",
+            "  url,",
+            "  method: 'PATCH',",
+            "  header: {",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate,",
+            "    'FSPIOP-Source': 'switch'",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "      \"credential\": {",
+            "        \"status\": \"VERIFIED\"",
+            "      }",
+            "    })",
+            "  }",
+            "}",
+            "  ",
+            "pm.sendRequest(patchConsentsIDReq, function (err, resp) {",
+            "  console.error('PATCH /consents/{ID} response')",
+            "  console.error(resp.json())",
+            "  console.error(err)",
+            "})"
+          ]
+        },
+        "delay": 0
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 12,
+    "priority": 1,
+    "description": "put /consents/{ID} - return error",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "credential id error: identifier of pair of keys, base64 encoded, min length 59",
+          "path": "credential.fidoPayload.id"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consents/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "put"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "body": {},
+        "statusCode": "202",
+        "scripts": {
+          "exec": [
+            "",
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString();",
+            "const consentId = pm.request.url.path[1]",
+            "const url = 'http://inbound-thirdparty-sdk:4005/consents/' + consentId + '/error' ",
+            "console.log('url:'+ url)",
+            "const patchConsentsIDReq = {",
+            "  url,",
+            "  method: 'PUT',",
+            "  header: {",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate,",
+            "    'FSPIOP-Source': 'switch'",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "      \"errorInformation\": {",
+            "        \"errorCode\": \"7212\",",
+            "        \"errorDescription\": \"Signed challenge does not match derived challenge\",",
+            "        \"extensionList\": {",
+            "          \"extension\": [",
+            "            {",
+            "              \"key\": \"test\",",
+            "              \"value\": \"test\"",
+            "            }",
+            "          ]",
+            "        }",
+            "      }",
+            "    })",
+            "  }",
+            "}",
+            "  ",
+            "pm.sendRequest(patchConsentsIDReq, function (err, resp) {",
+            "  console.error('PATCH /consents/{ID} response')",
+            "  console.error(resp.json())",
+            "  console.error(err)",
+            "})"
+          ]
+        },
+        "delay": 0
+      },
+      "type": "FIXED_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  },
+  {
+    "ruleId": 13,
+    "priority": 1,
+    "description": "post /thirdpartyRequests/transactions",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/thirdpartyRequests/transactions"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": null,
+      "path": null,
+      "params": {
+        "scripts": {
+          "exec": [
+            "const requestBody = JSON.parse(request.body)",
+            "",
+            "const toPartyId = requestBody.payee.partyIdInfo.partyIdType + '/' + requestBody.payee.partyIdInfo.partyIdentifier",
+            "",
+            "if (!environment.partyData) {",
+            "  environment.partyData = {}",
+            "}",
+            "",
+            "if (!environment.partyData[toPartyId]) {",
+            "  environment.partyData[toPartyId] = {}",
+            "}",
+            "",
+            "const partyData = environment.partyData[toPartyId]",
+            "",
+            "if (!partyData.balance) {",
+            "  partyData.balance = {}",
+            "}",
+            "",
+            "if (!partyData.balance[requestBody.amount.currency]) {",
+            "  partyData.balance[requestBody.amount.currency] = 0",
+            "}",
+            "",
+            "partyData.balance[requestBody.amount.currency] += +requestBody.amount.amount",
+            "",
+            "",
+            "if (!partyData.transactionHistory) {",
+            "  partyData.transactionHistory = []",
+            "}",
+            "const creditDate = new Date(request.headers.date)",
+            "const transaction = {",
+            "  date: creditDate.getTime(),",
+            "  transferId: requestBody.transactionRequestId,",
+            "  amount: requestBody.amount.amount,",
+            "  currency: requestBody.amount.currency,",
+            "  from: {",
+            "    idType: requestBody.payer.partyIdType,",
+            "    idValue: requestBody.payer.partyIdentifier",
+            "  }",
+            "}",
+            "partyData.transactionHistory.push(transaction)",
+            "",
+            "custom.pushMessage({ transaction: transaction, newBalance: partyData.balance , transactionHistory: partyData.transactionHistory }, toPartyId)"
+          ],
+          "scriptingEngine": "javascript"
+        }
+      },
+      "type": "MOCK_RESPONSE"
+    },
+    "type": "response",
+    "version": 1
+  }
+]

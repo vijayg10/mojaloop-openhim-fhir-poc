@@ -1,0 +1,15 @@
+apiVersion: v2
+description: Example dependencies for auth service and consent oracle
+name: example-dependencies
+version: 1.0.0
+appVersion: "1.0.0"
+home: http://mojaloop.io
+icon: http://mojaloop.io/images/logo.png
+sources:
+  - https://github.com/mojaloop/mojaloop
+  - https://github.com/mojaloop/helm
+  - https://github.com/mojaloop/auth-service
+  - https://github.com/mojaloop/als-consent-oracle
+maintainers:
+  - name: Vijay Kumar Guthi
+    email: vijaya.guthi@modusbox.com

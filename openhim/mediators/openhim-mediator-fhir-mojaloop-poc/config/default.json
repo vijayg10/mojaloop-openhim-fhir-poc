@@ -1,0 +1,63 @@
+{
+  "PORT": 3000,
+  "HOST": "0.0.0.0",
+  "CORS_WHITELIST": [
+    "http://localhost:3000",
+    "http://localhost:3010",
+    "http://localhost:3012",
+    "http://localhost:8080",
+    "http://localhost:8081"
+  ],
+  "ALLOW_CREDENTIALS": false,
+  "OPENHIM_CONFIG": {
+    "username": "root@openhim.org",
+    "password": "123456",
+    "apiURL": "https://localhost:8080",
+    "trustSelfSigned": true
+  },
+  "OPENHIM_REGISTER" : "",
+  "MEDIATOR_CONFIG" : {
+    "urn": "urn:mediator:fhir-mojaloop",
+    "version": "0.0.1",
+    "name": "openhim-mediator-fhir-mojaloop-poc",
+    "description": "Mojaloop FHIR Mediator",
+    "defaultChannelConfig": [
+      {
+        "name": "Mojaloop FHIR Mediator",
+        "urlPattern": "^/fhir-mojaloop",
+        "authType": "public",
+        "routes": [
+          {
+            "name": "Mojaloop FHIR Mediator Route",
+            "host": "docker.for.mac.localhost",
+            "path": "/health",
+            "port": "3000",
+            "primary": true,
+            "type": "http"
+          }
+        ],
+        "allow": ["admin"],
+        "methods": ["GET", "POST"],
+        "type": "http"
+      }
+    ],
+    "endpoints": [
+      {
+        "name": "Mojaloop FHIR Mediator Endpoint",
+        "host": "docker.for.mac.localhost",
+        "path": "/health",
+        "port": "3000",
+        "primary": true,
+        "type": "http"
+      }
+    ]
+  },
+  "PISP_ENDPOINT": "http://localhost:3003",
+  "RECEPIENT_ID_MAP": [
+    {
+      "uuid": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+      "idType": "MSISDN",
+      "idValue": "987654321"
+    }
+  ]
+}

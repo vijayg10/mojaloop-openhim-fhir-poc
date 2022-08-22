@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-svc-redis
+  labels:
+    app: auth-svc-redis
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: auth-svc-redis
+  template:
+    metadata:
+      labels:
+        app: auth-svc-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:5.0.4-alpine

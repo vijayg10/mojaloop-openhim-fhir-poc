@@ -1,0 +1,129 @@
+{
+  "test_cases": [
+    {
+      "id": 1,
+      "name": "SendMoney Happy Path",
+      "requests": [
+        {
+          "id": 1,
+          "description": "SendMoney",
+          "apiVersion": {
+            "minorVersion": 0,
+            "majorVersion": 1,
+            "type": "fhir4mojaloop",
+            "asynchronous": false
+          },
+          "operationPath": "/sendmoney/fhir4-invoice",
+          "path": "/sendmoney/fhir4-invoice",
+          "method": "post",
+          "body": {
+            "resourceType": "Invoice",
+            "id": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1",
+            "identifier": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                      "code": "UUID"
+                    }
+                  ]
+                },
+                "value": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1"
+              },
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                      "code": "Code"
+                    }
+                  ]
+                },
+                "value": "IV-UC-8156989548-105"
+              }
+            ],
+            "status": "active",
+            "type": {
+              "coding": [
+                {
+                  "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-type",
+                  "code": "policy",
+                  "display": "Policy"
+                }
+              ]
+            },
+            "recipient": {
+              "reference": "Patient/D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+              "type": "Patient",
+              "identifier": [
+                {
+                  "type": {
+                    "coding": [
+                      {
+                        "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                        "code": "UUID"
+                      }
+                    ]
+                  },
+                  "value": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1"
+                }
+              ]
+            },
+            "date": "2022-04-22",
+            "lineItem": [
+              {
+                "chargeItemCodeableConcept": {
+                  "coding": [
+                    {
+                      "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-charge-item",
+                      "code": "policy",
+                      "display": "Policy"
+                    }
+                  ]
+                },
+                "priceComponent": [
+                  {
+                    "extension": [
+                      {
+                        "url": "https://openimis.github.io/openimis_fhir_r4_ig//StructureDefinition/unit-price",
+                        "valueMoney": {
+                          "value": 2390,
+                          "currency": "USD"
+                        }
+                      }
+                    ],
+                    "type": "base",
+                    "code": {
+                      "coding": [
+                        {
+                          "system": "Code",
+                          "code": "Code",
+                          "display": "IV-UC-8156989548-105"
+                        }
+                      ]
+                    },
+                    "factor": 1,
+                    "amount": {
+                      "value": 2390,
+                      "currency": "USD"
+                    }
+                  }
+                ]
+              }
+            ],
+            "totalNet": {
+              "value": 2390,
+              "currency": "USD"
+            },
+            "totalGross": {
+              "value": 2390,
+              "currency": "USD"
+            }
+          },
+          "url": "http://docker.for.mac.localhost:5001/fhir-mojaloop"
+        }
+      ]
+    }
+  ]
+}

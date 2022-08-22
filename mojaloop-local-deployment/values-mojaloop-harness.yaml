@@ -1,0 +1,129 @@
+account-lookup-service:
+
+  account-lookup-service:
+    config:
+      featureEnableExtendedPartyIdType: true
+
+  account-lookup-service-admin:
+    config:
+      featureEnableExtendedPartyIdType: true
+
+
+mojaloop-bulk:
+  enabled: false
+
+finance-portal:
+  enabled: false
+
+thirdparty:
+  enabled: true
+  auth-svc:
+    enabled: true
+  consent-oracle:
+    enabled: true
+  tp-api-svc:
+    enabled: true
+
+ml-testing-toolkit:
+  enabled: true
+  # ml-testing-toolkit-backend:
+  #   ingress:
+  #     enabled: true
+  #     hosts:
+  #       specApi:
+  #         host: testing-toolkit-specapi.moja1.test.mojaloop.live
+  #         port: 5000
+  #         paths: ['/']
+  #       adminApi:
+  #         host: testing-toolkit.moja1.test.mojaloop.live
+  #         port: 5050
+  #         paths: ['/api/', '/socket.io/']
+  #   config:
+  #     user_config.json: {
+  #       "CALLBACK_RESOURCE_ENDPOINTS": {
+  #         "enabled": true,
+  #         "endpoints": [
+  #           {
+  #             "method": "put",
+  #             "path": "/parties/{Type}/{ID}",
+  #             "endpoint": "http://account-lookup.moja1.test.mojaloop.live"
+  #           },
+  #           {
+  #             "method": "put",
+  #             "path": "/quotes/{ID}",
+  #             "endpoint": "http://quoting-service.moja1.test.mojaloop.live"
+  #           },
+  #           {
+  #             "method": "put",
+  #             "path": "/transfers/{ID}",
+  #             "endpoint": "http://ml-api-adapter.moja1.test.mojaloop.live"
+  #           }
+  #         ]
+  #       },
+  #       "FSPID": "testingtoolkitdfsp",
+  #       "TRANSFERS_VALIDATION_WITH_PREVIOUS_QUOTES": true,
+  #       "TRANSFERS_VALIDATION_ILP_PACKET": true,
+  #       "TRANSFERS_VALIDATION_CONDITION": true,
+  #       "ILP_SECRET": "secret",
+  #       "LOG_SERVER_UI_URL": "http://efk.moja1.test.mojaloop.live/app/kibana"
+  #     }
+  #     system_config.json: {
+  #       "SERVER_LOGS": {
+  #         "ENABLED": true,
+  #         "ADAPTER": {
+  #           "API_URL": "http://elasticsearch.moja1.test.mojaloop.live/"
+  #         }
+  #       }
+  #     }
+
+  # ml-testing-toolkit-frontend:
+  #   ingress:
+  #     enabled: true
+  #     hosts:
+  #       ui:
+  #         host: testing-toolkit.moja1.test.mojaloop.live
+  #         port: 6060
+  #         paths: ['/']
+  #   config:
+  #     API_BASE_URL: http://testing-toolkit.moja1.test.mojaloop.live
+
+ml-ttk-test-setup:
+  tests:
+    enabled: true
+    weight: -5
+  config:
+    ttkBackendURL: http://$release_name-ml-testing-toolkit-backend:5050
+    testSuiteName: Setup
+    environmentName: vijay_test
+
+ml-ttk-test-val-gp:
+  tests:
+    enabled: true
+    weight: -5
+  config:
+    ttkBackendURL: http://$release_name-ml-testing-toolkit-backend:5050
+    testSuiteName: GP Tests
+    environmentName: vijay_test
+
+  configFileDefaults: {
+    "mode": "outbound"
+  }
+
+
+ml-ttk-test-setup-tp:
+  tests:
+    enabled: true
+    weight: -3
+  config:
+    ttkBackendURL: http://$release_name-ml-testing-toolkit-backend:5050
+    testSuiteName: Thirdparty Provisioning Collection
+    environmentName: moja1.test.mojaloop.live
+
+ml-ttk-test-val-tp:
+  tests:
+    enabled: true
+    weight: -2
+  config:
+    ttkBackendURL: http://$release_name-ml-testing-toolkit-backend:5050
+    testSuiteName: Thirdparty Tests
+    environmentName: vijay_test

@@ -1,0 +1,542 @@
+[
+  {
+    "ruleId": 1,
+    "priority": 1,
+    "description": "get /parties/{Type}/{ID}",
+    "apiVersion": {
+      "minorVersion": 0,
+      "majorVersion": 1,
+      "type": "fspiop",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/parties/{Type}/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/parties/{Type}/{ID}",
+      "params": {
+        "headers": {
+          "Content-Type": "application/vnd.interoperability.parties+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "X-Forwarded-For": "sed eiusmod sunt",
+          "FSPIOP-Source": "pisp",
+          "FSPIOP-Destination": "dfspa",
+          "FSPIOP-Encryption": "magna Excepteur dolore nisi fugiat",
+          "FSPIOP-Signature": "nisi",
+          "FSPIOP-URI": "veniam reprehenderit anim ut",
+          "FSPIOP-HTTP-Method": "PUT",
+          "Content-Length": ""
+        },
+        "body": {
+          "party": {
+            "partyIdInfo": {
+              "partyIdType": "{$request.params.Type}",
+              "partyIdentifier": "{$request.params.ID}",
+              "fspId": "{$config.FSPID}"
+            },
+            "merchantClassificationCode": "4321",
+            "name": "Justin Trudeau",
+            "personalInfo": {
+              "complexName": {
+                "firstName": "Justin",
+                "middleName": "Pierre",
+                "lastName": "Trudeau"
+              },
+              "dateOfBirth": "1980-01-01"
+            }
+          }
+        }
+      },
+      "delay": 0,
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 2,
+    "priority": 1,
+    "description": "get /parties/{Type}/{ID}/{SubId}",
+    "apiVersion": {
+      "minorVersion": 0,
+      "majorVersion": 1,
+      "type": "fspiop",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/parties/{Type}/{ID}/{SubId}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/parties/{Type}/{ID}/{SubId}",
+      "params": {},
+      "delay": 0,
+      "type": "MOCK_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 3,
+    "priority": 1,
+    "description": "post /thirdpartyRequests/transactions.",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/thirdpartyRequests/transactions"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "post",
+      "path": "/thirdpartyRequests/authorizations",
+      "params": {
+        "headers": {
+          "Accept": "application/vnd.interoperability.authorizations+json;version=1.0",
+          "Content-Type": "application/vnd.interoperability.authorizations+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "FSPIOP-Source": "DFSPA"
+        },
+        "body": {
+          "authorizationRequestId": "5f8ee7f9-290f-4e03-ae1c-1e81ecf398df",
+          "transactionRequestId": "b51ec534-ee48-4575-b6a9-ead2955b8069",
+          "challenge": "<base64 encoded binary - the encoded challenge>",
+          "transferAmount": {
+            "amount": "{$request.body.amount.amount}",
+            "currency": "{$request.body.amount.currency}"
+          },
+          "payeeReceiveAmount": {
+            "amount": "{$request.body.amount.amount}",
+            "currency": "{$request.body.amount.currency}"
+          },
+          "fees": {
+            "amount": "0",
+            "currency": "{$request.body.amount.currency}"
+          },
+          "payee": {
+            "partyIdInfo": {
+              "partyIdType": "{$request.body.payee.partyIdInfo.partyIdType}",
+              "partyIdentifier": "{$request.body.payee.partyIdInfo.partyIdentifier}",
+              "fspId": "dfspb"
+            }
+          },
+          "payer": {
+            "partyIdType": "THIRD_PARTY_LINK",
+            "partyIdentifier": "qwerty-123456",
+            "fspId": "dfspa"
+          },
+          "transactionType": {
+            "scenario": "TRANSFER",
+            "initiator": "PAYER",
+            "initiatorType": "CONSUMER"
+          },
+          "expiration": "2020-06-15T12:00:00.000Z"
+        },
+        "scripts": {
+          "exec": [
+            "",
+            "const userConfig = JSON.parse(pm.globals.get('userConfig'))",
+            "const curDate = (new Date()).toUTCString();",
+            "const reqBody = JSON.parse(pm.request.body);",
+            "const transactionRequestId = reqBody.transactionRequestId",
+            "const putThirdpartyRequestIDTransactionReq = {",
+            "  url: userConfig.CALLBACK_ENDPOINT + '/thirdpartyRequests/transactions/' + transactionRequestId,",
+            "  method: 'PUT',",
+            "  header: {",
+            "    'Accept': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Content-Type': 'application/vnd.interoperability.thirdparty+json;version=1.0',",
+            "    'Date': curDate,",
+            "    'FSPIOP-Source': 'DFSPA'",
+            "  },",
+            "  body: {",
+            "    mode: 'raw',",
+            "    raw: JSON.stringify({",
+            "      transactionId: '2f169631-ef99-4cb1-96dc-91e8fc08f539' ,",
+            "      transactionRequestState: 'RECEIVED'",
+            "    })",
+            "  }",
+            "}",
+            "  ",
+            "pm.sendRequest(putThirdpartyRequestIDTransactionReq, function (err, resp) {",
+            "  console.error('PUT /thirdpartyRequests/{ID}/transaction response', resp.json(), err)",
+            "})"
+          ]
+        }
+      },
+      "delay": 0,
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 4,
+    "priority": 1,
+    "description": "get /accounts/{ID}",
+    "apiVersion": {
+      "minorVersion": 0,
+      "majorVersion": 1,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/accounts/{ID}"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/accounts/{ID}",
+      "params": {
+        "headers": {
+          "Content-Type": "application/vnd.interoperability.parties+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "X-Forwarded-For": "sed eiusmod sunt",
+          "FSPIOP-Source": "dfspa",
+          "FSPIOP-Destination": "pisp",
+          "FSPIOP-Encryption": "magna Excepteur dolore nisi fugiat",
+          "FSPIOP-Signature": "nisi",
+          "FSPIOP-URI": "veniam reprehenderit anim ut",
+          "FSPIOP-HTTP-Method": "PUT",
+          "Content-Length": ""
+        },
+        "body": {
+          "accounts": [
+            {
+              "accountNickname": "dfspa.user.nickname1",
+              "address": "dfspa.username.1234",
+              "currency": "ZAR"
+            },
+            {
+              "accountNickname": "dfspa.user.nickname2",
+              "address": "dfspa.username.5678",
+              "currency": "USD"
+            }
+          ]
+        }
+      },
+      "delay": 0,
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 5,
+    "priority": 1,
+    "description": "post /quotes",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 1,
+      "type": "fspiop",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/quotes"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/quotes/{ID}",
+      "params": {
+        "scripts": {}
+      },
+      "type": "MOCK_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 6,
+    "priority": 1,
+    "description": "post /consentRequests - WEB",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "b51ec534-ee48-4575-b6a9-ead2955b8069",
+          "path": "consentRequestId"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consentRequests"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/consentRequests/{ID}",
+      "params": {
+        "headers": {
+          "Accept": "application/vnd.interoperability.thirdparty+json;version=1.0",
+          "Content-Type": "application/vnd.interoperability.thirdparty+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "FSPIOP-Source": "DFSPA"
+        },
+        "body": {
+          "scopes": [
+            {
+              "address": "dfspa.username.1234",
+              "actions": [
+                "ACCOUNTS_TRANSFER",
+                "ACCOUNTS_GET_BALANCE"
+              ]
+            },
+            {
+              "address": "dfspa.username.5678",
+              "actions": [
+                "ACCOUNTS_TRANSFER",
+                "ACCOUNTS_GET_BALANCE"
+              ]
+            }
+          ],
+          "callbackUri": "pisp-app://callback.com",
+          "authUri": "dfspa.com/authorize?consentRequestId=456",
+          "authChannels": [
+            "WEB"
+          ]
+        },
+        "scripts": {}
+      },
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 7,
+    "priority": 1,
+    "description": "post /consentRequests - OTP",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "body",
+          "operator": "equal",
+          "value": "c51ec534-ee48-4575-b6a9-ead2955b8069",
+          "path": "consentRequestId"
+        },
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/consentRequests"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/consentRequests/{ID}",
+      "params": {
+        "headers": {
+          "Accept": "application/vnd.interoperability.thirdparty+json;version=1.0",
+          "Content-Type": "application/vnd.interoperability.thirdparty+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "FSPIOP-Source": "DFSPA"
+        },
+        "body": {
+          "scopes": [
+            {
+              "address": "dfspa.username.1234",
+              "actions": [
+                "ACCOUNTS_TRANSFER",
+                "ACCOUNTS_GET_BALANCE"
+              ]
+            },
+            {
+              "address": "dfspa.username.5678",
+              "actions": [
+                "ACCOUNTS_TRANSFER",
+                "ACCOUNTS_GET_BALANCE"
+              ]
+            }
+          ],
+          "callbackUri": "pisp-app://callback.com",
+          "authChannels": [
+            "OTP"
+          ]
+        },
+        "scripts": {}
+      },
+      "delay": 0,
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 9,
+    "priority": 1,
+    "description": "post /transfers",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 1,
+      "type": "fspiop",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/transfers"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "post"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/transfers/{ID}",
+      "params": {
+        "body": {
+          "transferState": "COMMITTED"
+        },
+        "scripts": {}
+      },
+      "delay": 0,
+      "type": "MOCK_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  },
+  {
+    "ruleId": 10,
+    "priority": 1,
+    "description": "get /services/{ServiceType}",
+    "apiVersion": {
+      "minorVersion": 1,
+      "majorVersion": 0,
+      "type": "thirdparty_pisp",
+      "asynchronous": true
+    },
+    "conditions": {
+      "all": [
+        {
+          "fact": "operationPath",
+          "operator": "equal",
+          "value": "/services/{ServiceType}"
+        },
+        {
+          "fact": "pathParams",
+          "operator": "equal",
+          "value": "THIRD_PARTY_DFSP",
+          "path": "ServiceType"
+        },
+        {
+          "fact": "method",
+          "operator": "equal",
+          "value": "get"
+        }
+      ]
+    },
+    "event": {
+      "method": "put",
+      "path": "/services/{ServiceType}",
+      "params": {
+        "headers": {
+          "Content-Type": "application/vnd.interoperability.parties+json;version=1.0",
+          "Date": "Wed, 27 May 2020 11:13:34 GMT",
+          "X-Forwarded-For": "sed eiusmod sunt",
+          "FSPIOP-Source": "switch",
+          "FSPIOP-Destination": "pispA",
+          "FSPIOP-Encryption": "magna Excepteur dolore nisi fugiat",
+          "FSPIOP-Signature": "nisi",
+          "FSPIOP-URI": "veniam reprehenderit anim ut",
+          "FSPIOP-HTTP-Method": "PUT",
+          "Content-Length": ""
+        },
+        "body": {
+          "providers": [
+            "dfspA",
+            "dfspB"
+          ]
+        }
+      },
+      "delay": 0,
+      "type": "FIXED_CALLBACK"
+    },
+    "type": "callback",
+    "version": 1
+  }
+]
