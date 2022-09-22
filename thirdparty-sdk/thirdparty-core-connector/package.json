@@ -4,7 +4,7 @@
   "description": "Core Connector for Thirdparty SDK",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json; rm -rf dist/src/interface; cp -R src/interface dist/src/interface; cp -R config dist/config;",
+    "build": "tsc -p ./tsconfig.build.json; rm -rf dist/src/interface; cp -R src/interface dist/src/interface; cp -R src/server/static-files dist/src/server/static-files;",
     "watch": "npx tsc -w",
     "clean": "rm -rf dist node_modules",
     "start": "npm run start:no-build",
@@ -100,6 +100,7 @@
     "jest": "^27.2.2",
     "jest-junit": "^12.3.0",
     "jest-mock-process": "^1.4.1",
+    "nodemon": "^2.0.20",
     "npm-audit-resolver": "^2.3.1",
     "npm-check-updates": "^11.8.5",
     "prettier": "^2.3.0",

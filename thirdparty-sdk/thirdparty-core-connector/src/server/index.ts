@@ -19,6 +19,7 @@ import { Server } from '@hapi/hapi'
 import { ServiceConfig } from '../shared/config'
 import extensions from './extensions'
 import plugins from './plugins'
+import * as Path from 'path'
 
 import onValidateFail from './handlers/onValidateFail'
 import Logger from '@mojaloop/central-services-logger'
@@ -36,7 +37,10 @@ async function _create (config: ServiceConfig): Promise<Server> {
       cors: {
         origin: config.CORS_WHITELIST,
         credentials: config.ALLOW_CREDENTIALS
-      }
+      },
+      files: {
+        relativeTo: Path.join(__dirname, '..')
+      }      
     }
   })
   return server

@@ -12,16 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Path from 'path'
-import { Util } from '@mojaloop/central-services-shared'
+import * as Hapi from '@hapi/hapi';
 
 const plugin = {
-  plugin: Util.Hapi.APIDocumentation,
-  options: {
-    documentPath: Path.resolve(__dirname, '../../interface/api.yaml'),
-    widdershinsOptions: {
-      sample: true
-    }
+  name: 'apiDoc',
+  version: '1.0.0',
+  register: async function (server: Hapi.Server) {
+    server.route({
+      method: 'GET',
+      path: '/docs',
+      handler: function (_request: Hapi.Request, h: Hapi.ResponseToolkit) {
+        return h.file('server/static-files/index.html');
+      }
+    });
+    server.route({
+      method: 'GET',
+      path: '/docs/{file*}',
+      handler: function (_request: Hapi.Request, h: Hapi.ResponseToolkit) {
+        return h.file('server/static-files/index.html');
+      }
+    });
+    server.route({
+      method: 'GET',
+      path: '/interface/{file*}',
+      handler: function (request: Hapi.Request, h: Hapi.ResponseToolkit) {
+        return h.file(`interface/${request.params.file}`);
+      }
+    });
   }
 }
 
