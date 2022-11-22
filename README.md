@@ -37,7 +37,7 @@ That's it, all the services are deployed.
 
 ### Making a transfer and monitor the logs
 - Execute the following HTTP request either from command line or from postman.
-  ```
+```
   curl --location --request POST 'http://localhost:15001/fhir-mojaloop/sendmoney/fhir4-invoice' --header 'Content-Type: application/json' --data-raw '{
   "resourceType": "Invoice",
   "id": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1",
@@ -141,7 +141,8 @@ That's it, all the services are deployed.
       "currency": "USD"
   }
 }'
-  ```
+```
+
 - You should get the 'Completed' status in the response and 'transactionRequestState' should be 'ACCEPTED' in the approveResponse body parameter.
 - Open openHIM console on 'http://localhost:9080' with username 'root@openhim.org' and password '123456' (As we changed to this in previous step)
 - Goto "Transaction Log" and you can find the transaction there.
