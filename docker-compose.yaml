@@ -7,7 +7,6 @@ networks:
 services:
   ## Third-party transfer related services
   inbound-thirdparty-sdk:
-    container_name: inbound-thirdparty-sdk
     image: "mojaloop/thirdparty-sdk:v12.0.2"
     command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js inbound-thirdparty-sdk && NODE_ENV=integration npm run start:inbound"
     volumes:
@@ -30,7 +29,6 @@ services:
       start_period: 10s
       interval: 30s
   outbound-thirdparty-sdk:
-    container_name: outbound-thirdparty-sdk
     image: "mojaloop/thirdparty-sdk:v12.0.2"
     command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js outbound-thirdparty-sdk && NODE_ENV=integration npm run start:outbound"
     volumes:
@@ -55,7 +53,6 @@ services:
 
   sdk-scheme-adapter:
     image: "mojaloop/sdk-scheme-adapter:v12.0.0"
-    container_name: sdk-scheme-adapter
     env_file: ./thirdparty-sdk/docker/sdk_scheme_adapter.env
     volumes:
       - "./thirdparty-sdk/docker/secrets:/secrets"
@@ -71,7 +68,6 @@ services:
     restart: always
 
   redis-fhir-poc:
-    container_name: redis-fhir-poc
     image: "redis:6.2.4-alpine"
     networks:
       - fhir-poc-net
@@ -81,7 +77,6 @@ services:
 
   ml-testing-toolkit:
     image: mojaloop/ml-testing-toolkit:v13.5.0
-    container_name: ml-testing-toolkit
     volumes:
       - "./thirdparty-sdk/docker/contract/ml-testing-toolkit/spec_files:/opt/mojaloop-testing-toolkit/spec_files"
       - "./thirdparty-sdk/docker/contract/ml-testing-toolkit/secrets:/opt/mojaloop-testing-toolkit/secrets"
@@ -112,7 +107,6 @@ services:
 
   ml-testing-toolkit-ui:
     image: mojaloop/ml-testing-toolkit-ui:v13.5.0
-    container_name: ml-testing-toolkit-ui
     ports:
       - "16060:6060"
     environment:
@@ -138,7 +132,6 @@ services:
     image: mojaloop/mojaloop-simulator:v12.0.0
     networks:
       - fhir-poc-net
-    container_name: pisp-simulator
     env_file: ./thirdparty-sdk/docker/dfsp_backend.env
     volumes:
        - ./thirdparty-sdk/docker/dfsp_rules.json:/src/rules.json
@@ -161,7 +154,6 @@ services:
 
   ## OpenHIM related services
   mongo-db:
-    container_name: mongo-db
     image: mongo:4.0
     networks:
       - fhir-poc-net
@@ -170,7 +162,6 @@ services:
     restart: unless-stopped
 
   openhim-core:
-    container_name: openhim-core
     image: jembi/openhim-core:latest
     restart: unless-stopped
     environment:
@@ -190,7 +181,6 @@ services:
       retries: 10
 
   openhim-console:
-    container_name: openhim-console
     image: jembi/openhim-console:v1.15.0
     restart: unless-stopped
     networks:
@@ -206,7 +196,6 @@ services:
         condition: service_healthy
   
   openhim-mediator-fhir-mojaloop-poc:
-    container_name: openhim-mediator-fhir-mojaloop-poc
     image: openhim-mediator-fhir-mojaloop-poc:local
     build:
       context: ./openhim/mediators/openhim-mediator-fhir-mojaloop-poc
