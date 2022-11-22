@@ -29,7 +29,7 @@
         "routes": [
           {
             "name": "Mojaloop FHIR Mediator Route",
-            "host": "docker.for.mac.localhost",
+            "host": "openhim-mediator-fhir-mojaloop-poc",
             "path": "/health",
             "port": "3000",
             "primary": true,
@@ -44,7 +44,7 @@
     "endpoints": [
       {
         "name": "Mojaloop FHIR Mediator Endpoint",
-        "host": "docker.for.mac.localhost",
+        "host": "openhim-mediator-fhir-mojaloop-poc",
         "path": "/health",
         "port": "3000",
         "primary": true,

@@ -60,7 +60,7 @@ module.exports = {
       wait4: [
         {
           description: 'Redis Cache',
-          uri: 'redis:6379',
+          uri: 'redis-fhir-poc:6379',
           method: 'ncat'
         }
       ]
@@ -72,7 +72,7 @@ module.exports = {
       wait4: [
         {
           description: 'Redis Cache',
-          uri: 'redis:6379',
+          uri: 'redis-fhir-poc:6379',
           method: 'ncat'
         }
       ]

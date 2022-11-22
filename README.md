@@ -97,7 +97,7 @@ That's it, all the services are deployed.
   "recipient": {
       "reference": "Patient/D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
       "type": "Patient",
-      "identifier": {
+      "identifier": [{
           "type": {
               "coding": [
                   {
@@ -107,7 +107,7 @@ That's it, all the services are deployed.
               ]
           },
           "value": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1"
-      }
+      }]
   },
   "date": "2022-04-22",
   "lineItem": [

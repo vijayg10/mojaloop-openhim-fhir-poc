@@ -1,0 +1,90 @@
+{
+    "Users": [
+      {
+        "groups": [
+          "admin"
+        ],
+        "firstname": "Super",
+        "surname": "User",
+        "email": "root@openhim.org",
+        "passwordAlgorithm": "sha512",
+        "passwordHash": "9b2d0158e5f9f005787183629b155b91ef07f050428ac3bb545f48fcb23dc42e6627e51b263a69e730cc9fcf0f6f7a1743e7ddde7016319764f065a0bdca22a6",
+        "passwordSalt": "f5b85da7e8508841870ca2263a9e2385",
+        "expiry": null,
+        "locked": false,
+        "token": null,
+        "tokenType": null
+      }
+    ],
+    "Clients": [
+      {
+        "roles": [
+          "instant"
+        ],
+        "customTokenID": "{{OPENHIM_CLIENT_TOKEN}}",
+        "clientID": "instant-client",
+        "name": "Instant Client"
+      }
+    ],
+    "Channels": [
+      {
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "type": "http",
+        "allow": [
+          "admin"
+        ],
+        "whitelist": [],
+        "authType": "public",
+        "matchContentTypes": [],
+        "properties": [],
+        "txViewAcl": [],
+        "txViewFullAcl": [],
+        "txRerunAcl": [],
+        "status": "enabled",
+        "rewriteUrls": false,
+        "addAutoRewriteRules": true,
+        "autoRetryEnabled": false,
+        "autoRetryPeriodMinutes": 60,
+        "routes": [
+          {
+            "type": "http",
+            "status": "enabled",
+            "forwardAuthHeader": false,
+            "name": "Mojaloop FHIR Mediator Route",
+            "secured": false,
+            "host": "openhim-mediator-fhir-mojaloop-poc",
+            "port": 3000,
+            "path": "",
+            "pathTransform": "s/\\/fhir-mojaloop//g",
+            "primary": true,
+            "username": "",
+            "password": ""
+          }
+        ],
+        "requestBody": true,
+        "responseBody": true,
+        "rewriteUrlsConfig": [],
+        "name": "Mojaloop FHIR Mediator",
+        "description": "Mojaloop FHIR Mediator",
+        "urlPattern": "^/fhir-mojaloop",
+        "priority": 1,
+        "matchContentRegex": null,
+        "matchContentXpath": null,
+        "matchContentValue": null,
+        "matchContentJson": null,
+        "pollingSchedule": null,
+        "tcpHost": null,
+        "tcpPort": null,
+        "updatedBy": {
+          "id": "5e2eca110bb0420011f0cd84",
+          "name": "Super User"
+        },
+        "alerts": []
+      }
+    ],
+    "Mediators": [],
+    "ContactGroups": []
+  }
