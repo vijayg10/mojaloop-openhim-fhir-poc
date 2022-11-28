@@ -28,11 +28,10 @@ export interface ServiceConfig {
   OPENHIM_CONFIG: any,
   OPENHIM_REGISTER: boolean,
   MEDIATOR_CONFIG: any,
-  PISP_ENDPOINT: string;
-  RECEPIENT_ID_MAP: any[];
+  PIL_ENDPOINT: string;
 }
 
-const RC = parse(rc('OPENHIM_MEDIATOR_FHIR_MOJALOOP', Config)) as ServiceConfig
+const RC = parse(rc('OPENHIM_MEDIATOR_FHIR_PIL', Config)) as ServiceConfig
 
 export default {
   ...RC,

@@ -1,9 +1,9 @@
 openapi: 3.0.2
 info:
-  title: FHIR Mojaloop Mediator
+  title: FHIR Payments Interoperability Layer Mediator
   version: '1.0'
   description: >-
-    An API to post FHIR invoices to trigger a transfer in mojaloop
+    An API to post FHIR invoices to trigger a transfer using Payments Interoperability Layer
   license:
     name: TBD
     url: TBD
@@ -43,7 +43,7 @@ paths:
     post:
       operationId: SendMoneyFHIR4Invoice
       description: >-
-        This request is used initiate a transfer in mojaloop using FHIR4 invoice.
+        This request is used initiate a transfer in Payments Interoperability Layer using FHIR4 invoice.
       requestBody:
         content:
           application/json:
@@ -223,3 +223,107 @@ components:
               example: EUR
 
       description: Data model for FHIR4 Invoice.
+      example:
+        {
+          "resourceType": "Invoice",
+          "id": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1",
+          "identifier": [
+              {
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "UUID"
+                          }
+                      ]
+                  },
+                  "value": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1"
+              },
+              {
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "Code"
+                          }
+                      ]
+                  },
+                  "value": "IV-UC-8156989548-105"
+              }
+          ],
+          "status": "active",
+          "type": {
+              "coding": [
+                  {
+                      "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-type",
+                      "code": "policy",
+                      "display": "Policy"
+                  }
+              ]
+          },
+          "recipient": {
+              "reference": "Patient/D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+              "type": "Patient",
+              "identifier": [{
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "UUID"
+                          }
+                      ]
+                  },
+                  "value": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1"
+              }]
+          },
+          "date": "2022-04-22",
+          "lineItem": [
+              {
+                  "chargeItemCodeableConcept": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-charge-item",
+                              "code": "policy",
+                              "display": "Policy"
+                          }
+                      ]
+                  },
+                  "priceComponent": [
+                      {
+                          "extension": [
+                              {
+                                  "url": "https://openimis.github.io/openimis_fhir_r4_ig//StructureDefinition/unit-price",
+                                  "valueMoney": {
+                                      "value": 2390.0,
+                                      "currency": "USD"
+                                  }
+                              }
+                          ],
+                          "type": "base",
+                          "code": {
+                              "coding": [
+                                  {
+                                      "system": "Code",
+                                      "code": "Code",
+                                      "display": "IV-UC-8156989548-105"
+                                  }
+                              ]
+                          },
+                          "factor": 1.0,
+                          "amount": {
+                              "value": 2390.0,
+                              "currency": "USD"
+                          }
+                      }
+                  ]
+              }
+          ],
+          "totalNet": {
+              "value": 2390.0,
+              "currency": "USD"
+          },
+          "totalGross": {
+              "value": 2390.0,
+              "currency": "USD"
+          }
+        }

@@ -12,24 +12,24 @@
   "OPENHIM_CONFIG": {
     "username": "root@openhim.org",
     "password": "123456",
-    "apiURL": "https://localhost:8080",
+    "apiURL": "https://openhim-core:8080",
     "trustSelfSigned": true
   },
   "OPENHIM_REGISTER" : "",
   "MEDIATOR_CONFIG" : {
-    "urn": "urn:mediator:fhir-mojaloop",
+    "urn": "urn:mediator:fhir-pil",
     "version": "0.0.1",
-    "name": "openhim-mediator-fhir-mojaloop-poc",
-    "description": "Mojaloop FHIR Mediator",
+    "name": "openhim-mediator-fhir-pil-poc",
+    "description": "Payment Interoperability Layer FHIR Mediator",
     "defaultChannelConfig": [
       {
-        "name": "Mojaloop FHIR Mediator",
-        "urlPattern": "^/fhir-mojaloop",
+        "name": "Payment Interoperability Layer FHIR Mediator",
+        "urlPattern": "^/fhir-pil",
         "authType": "public",
         "routes": [
           {
-            "name": "Mojaloop FHIR Mediator Route",
-            "host": "openhim-mediator-fhir-mojaloop-poc",
+            "name": "Payment Interoperability Layer FHIR Mediator Route",
+            "host": "openhim-mediator-fhir-pil-poc",
             "path": "/health",
             "port": "3000",
             "primary": true,
@@ -43,8 +43,8 @@
     ],
     "endpoints": [
       {
-        "name": "Mojaloop FHIR Mediator Endpoint",
-        "host": "openhim-mediator-fhir-mojaloop-poc",
+        "name": "Payment Interoperability Layer FHIR Mediator Endpoint",
+        "host": "openhim-mediator-fhir-pil-poc",
         "path": "/health",
         "port": "3000",
         "primary": true,
@@ -52,12 +52,5 @@
       }
     ]
   },
-  "PISP_ENDPOINT": "http://localhost:3003",
-  "RECEPIENT_ID_MAP": [
-    {
-      "uuid": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
-      "idType": "MSISDN",
-      "idValue": "987654321"
-    }
-  ]
+  "PIL_ENDPOINT": "http://payments-interoperability-layer-3pp-poc:3001"
 }

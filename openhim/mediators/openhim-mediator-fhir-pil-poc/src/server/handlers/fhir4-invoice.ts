@@ -16,7 +16,7 @@ import { StateResponseToolkit } from '~/server/plugins/state'
 import { Request, ResponseObject } from '@hapi/hapi'
 import { ValidationError } from '../../validation/validation-error'
 import Config from '../../shared/config'
-import PISPUtils from '../../lib/pisp-utils'
+import PISPUtils from '../../lib/pil-utils'
 import { FHIR4Invoice } from '../../lib/fhir4-utils'
 import OpenHIMUtils from '../../lib/openhim-utils'
 import FHIR4Utils from '../../lib/fhir4-utils'
@@ -36,8 +36,8 @@ const SendMoney = async (
     const invoice : FHIR4Invoice = <FHIR4Invoice>_request.payload
     try {
       // Some aync communication here
-      const mojaloopResponse = await PISPUtils.sendMoney(invoice)
-      const fhir4PaymentNotice = FHIR4Utils.convertMojaloopResponseToFHIRPaymentNotice(invoice, mojaloopResponse)
+      const pilResponse = await PISPUtils.sendMoney(invoice)
+      const fhir4PaymentNotice = FHIR4Utils.convertPILResponseToFHIRPaymentNotice(invoice, pilResponse)
       const openHimResponse = OpenHIMUtils.buildReturnObject('Completed', '200', fhir4PaymentNotice)
       return h.response(openHimResponse).code(200)
     } catch (err) {

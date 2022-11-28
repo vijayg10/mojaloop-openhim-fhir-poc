@@ -14,8 +14,8 @@ services:
     container_name: payments-interoperability-layer-3pp-poc
     volumes:
       - "./payments-interoperability-layer-3pp-poc/config:/opt/app/dist/config"
-    ports:
-      - "3001:3001"
+    # ports:
+    #   - "3001:3001"
 
   ## Third-party transfer related services
   inbound-thirdparty-sdk:
@@ -207,16 +207,16 @@ services:
       openhim-core:
         condition: service_healthy
   
-  openhim-mediator-fhir-mojaloop-poc:
-    image: openhim-mediator-fhir-mojaloop-poc:local
+  openhim-mediator-fhir-pil-poc:
+    image: openhim-mediator-fhir-pil-poc:local
     build:
-      context: ./openhim/mediators/openhim-mediator-fhir-mojaloop-poc
+      context: ./openhim/mediators/openhim-mediator-fhir-pil-poc
       dockerfile: Dockerfile
     networks:
       - fhir-poc-net
     environment:
-      - OPENHIM_MEDIATOR_FHIR_MOJALOOP_PISP_ENDPOINT=http://thirdparty-core-connector:3003
-      - OPENHIM_MEDIATOR_FHIR_MOJALOOP_OPENHIM_CONFIG__apiURL=https://openhim-core:8080
+      - OPENHIM_MEDIATOR_FHIR_PIL_PIL_ENDPOINT=http://payments-interoperability-layer-3pp-poc:3001
+      - OPENHIM_MEDIATOR_FHIR_PIL_OPENHIM_CONFIG__apiURL=https://openhim-core:8080
     # ports:
     #   - "3000:3000"
     depends_on:

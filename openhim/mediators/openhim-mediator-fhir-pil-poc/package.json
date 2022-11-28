@@ -1,8 +1,8 @@
 {
-  "name": "openhim-mediator-fhir-mojaloop-poc",
+  "name": "openhim-mediator-fhir-pil-poc",
   "version": "0.0.2",
-  "description": "OpenHIM mediator for mojaloop integration",
-  "author": "Mojaloop",
+  "description": "OpenHIM mediator for payments interoperability layer integration",
+  "author": "DCI",
   "contributors": [
     "Vijaya Kumar Guthi <vijaya.guthi@modusbox.com>"
   ],
@@ -39,10 +39,12 @@
     "assert": "^2.0.0",
     "axios": "^0.26.1",
     "dateformat": "^4.5.1",
+    "nodemon": "^2.0.20",
     "openhim-mediator-utils": "^0.2.4",
     "parse-strings-in-object": "^1.4.0",
     "rc": "^1.2.8",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -53,6 +55,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.1",
     "@types/rc": "^1.2.0",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",

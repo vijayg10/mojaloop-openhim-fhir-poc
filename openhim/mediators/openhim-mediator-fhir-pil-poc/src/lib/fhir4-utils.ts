@@ -16,8 +16,8 @@
 import Logger from '@mojaloop/central-services-logger'
 import dateFormat from 'dateformat'
 import Config from '../shared/config'
-import { PISPRequest, PISPResponse } from './pisp-utils'
-import IDMapUtils from './id-map-utils'
+import { PILRequest, PILResponse } from './pil-utils'
+import {v4 as uuidv4} from 'uuid';
 
 export interface FHIR4Invoice {
   id: string;
@@ -92,24 +92,27 @@ const getUUIDIdentifier = (identifier: any[]) => {
   return UUIDIdentifier.value
 }
 
-const convertFHIRInvoiceToMojaloopRequest = async (
+const convertFHIRInvoiceToPILRequest = async (
   invoice: FHIR4Invoice
-): Promise<PISPRequest> => {
+): Promise<PILRequest> => {
   // const accountRefArr = invoice.account.reference.split('/')
   const recepientUUID = getUUIDIdentifier(invoice.recipient?.identifier)
-  const mojaloopId = await IDMapUtils.getMojaloopId(recepientUUID)
   return {
-    payeeIdType: mojaloopId.idType,
-    payeeIdValue: mojaloopId.idValue,
-    payerIdValue: getUUIDIdentifier(invoice.identifier),
-    amount: invoice.totalGross.value + '',
-    currency: invoice.totalGross.currency
+    disbursementId: uuidv4(),
+    note: 'string',
+    // payerIdValue: getUUIDIdentifier(invoice.identifier),
+    payeeList: [{
+      payeeIdType: 'FHIRID',
+      payeeIdValue: recepientUUID,
+      amount: invoice.totalGross.value + '',
+      currency: invoice.totalGross.currency
+    }]
   }
 }
 
-const convertMojaloopResponseToFHIRPaymentNotice = (
+const convertPILResponseToFHIRPaymentNotice = (
   fhir4Invoice: FHIR4Invoice,
-  pispResponse: PISPResponse
+  pilResponse: PILResponse
 ): FHIR4PaymentNotice => {
   const now = new Date()
   const paymentNotice = {
@@ -131,13 +134,13 @@ const convertMojaloopResponseToFHIRPaymentNotice = (
     payee: fhir4Invoice.account,
     recipient: fhir4Invoice.account,
     amount: {
-      value: +pispResponse.initiateResponse?.authorization?.transferAmount?.amount,
-      currency: pispResponse.initiateResponse?.authorization?.transferAmount?.currency
+      value: fhir4Invoice.totalGross.value,
+      currency: fhir4Invoice.totalGross.currency
     },
     paymentStatus: {
       coding: [{
-        system: 'https://github.com/mojaloop/mojaloop-specification/blob/master/fspiop-api/documents/v1.1-document-set/API%20Definition%20v1.1.md#7512-transactionstate',
-        code: pispResponse.approveResponse?.transactionStatus?.transactionState
+        system: 'https://sp-convergence.github.io/payments-interoperability-layer/documentation/v0.1/Code%20Directories.html#transfer-status-cd002',
+        code: pilResponse.payeeResults[0]?.status
       }]
     }
   }
@@ -146,6 +149,6 @@ const convertMojaloopResponseToFHIRPaymentNotice = (
 
 export default {
   getUUIDIdentifier,
-  convertFHIRInvoiceToMojaloopRequest,
-  convertMojaloopResponseToFHIRPaymentNotice
+  convertFHIRInvoiceToPILRequest,
+  convertPILResponseToFHIRPaymentNotice
 }

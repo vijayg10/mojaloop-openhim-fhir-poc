@@ -16,8 +16,6 @@ import {activateHeartbeat, registerMediator} from 'openhim-mediator-utils'
 import Logger from '@mojaloop/central-services-logger'
 
 import Config from '../shared/config'
-import { FHIR4Invoice, FHIR4PaymentNotice } from './fhir4-utils'
-import { PISPResponse } from './pisp-utils'
 
 let urn: string
 
