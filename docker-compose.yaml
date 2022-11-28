@@ -20,7 +20,7 @@ services:
   ## Third-party transfer related services
   inbound-thirdparty-sdk:
     image: "mojaloop/thirdparty-sdk:v12.0.2"
-    command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js inbound-thirdparty-sdk && NODE_ENV=integration npm run start:inbound"
+    command: sh -c "NODE_ENV=integration npm run start:inbound"
     user: root
     volumes:
       - ./thirdparty-sdk/docker/wait4:/opt/thirdparty-sdk/wait4
@@ -43,7 +43,7 @@ services:
       interval: 30s
   outbound-thirdparty-sdk:
     image: "mojaloop/thirdparty-sdk:v12.0.2"
-    command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js outbound-thirdparty-sdk && NODE_ENV=integration npm run start:outbound"
+    command: sh -c "NODE_ENV=integration npm run start:outbound"
     user: root
     volumes:
       - ./thirdparty-sdk/docker/wait4:/opt/thirdparty-sdk/wait4
