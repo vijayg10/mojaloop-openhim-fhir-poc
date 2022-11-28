@@ -1,0 +1,588 @@
+openapi: 3.0.2
+info:
+  title: API Specification - Payments Interoperability Layer
+  version: '0.1'
+  description: >-
+    An API to perform a disbursements through various payment execution systems
+  license:
+    name: Apache License v2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+paths:
+  /health:
+    get:
+      operationId: HealthGet
+      summary: Health check endpoint
+      description: >-
+        The HTTP request GET /health is used to return the current status of the
+        API.
+      tags:
+        - health
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+
+  /disbursementCheck:
+    post:
+      operationId: DisbursementCheck
+      description: >-
+        This request is used check the feasibility of a disbursement.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisbursementCheckRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisbursementCheckResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+
+  /disbursement:
+    post:
+      operationId: Disbursement
+      description: >-
+        This request is used initiate a disbursement.
+        The response returned includes the status of the individual payment and the disbursementId.
+        The status of RECEIVED or PENDING indicates the request is being processed but is not yet COMPLETED.
+        If you receive the RECEIVED or PENDING status, you can use the GET call with disbursementId to poll the payment status until it transitions to COMPLETED or FAILED.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisbursementRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisbursementResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+  /disbursement/{disbursementId}:
+    get:
+      operationId: GetDisbursement
+      description: >-
+        This request is used get the status of a disbursement.
+      parameters:
+      - name: disbursementId
+        in: path
+        description: disbursementId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisbursementResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+
+components:
+  responses:
+    '200':
+      description: OK
+    '400':
+      description: Bad Request
+    '401':
+      description: Unauthorized
+    '403':
+      description: Forbidden
+    '404':
+      description: Not Found
+    '405':
+      description: Method Not Allowed
+    '406':
+      description: Not Acceptable
+    '501':
+      description: Not Implemented
+    '503':
+      description: Service Unavailable
+
+
+  headers:
+    Content-Length:
+      required: false
+      schema:
+        type: integer
+      description: >-
+        The `Content-Length` header field indicates the anticipated size of the
+        payload body. Only sent if there is a body.
+
+
+        **Note:** The API supports a maximum size of 5242880 bytes (5
+        Megabytes).
+    Content-Type:
+      schema:
+        type: string
+      required: true
+      description: >-
+        The `Content-Type` header indicates the specific version of the API used
+        to send the payload body.
+  schemas:
+    DisbursementCheckRequest:
+      title: DisbursementCheckRequest
+      type: object
+      required:
+        - requestId
+        - payeeList
+      properties:
+        requestId:
+          type: string
+          example: f2957f7a-34c3-11ed-a261-0242ac120002
+        payeeList:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/IndividualPayeeCheck'
+      description: Data model for Disbursement Request
+      example:
+        {
+          "requestId": "f2957f7a-34c3-11ed-a261-0242ac120002",
+          "note": "HOSPITAL BILLS",
+          "payeeList": [
+            {
+              "payeeIdType": "FHIRID",
+              "payeeIdValue": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1"
+            }
+          ]
+        }
+    DisbursementRequest:
+      title: DisbursementRequest
+      type: object
+      required:
+        - disbursementId
+        - payeeList
+      properties:
+        disbursementId: 
+          type: string
+          example: f2957f7a-34c3-11ed-a261-0242ac120002
+        note: 
+          type: string
+          example: HOSPITAL BILLS
+        payeeList:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/IndividualPayee'
+      description: Data model for Disbursement Request
+      example:
+        {
+          "disbursementId": "f2957f7a-34c3-11ed-a261-0242ac120002",
+          "note": "HOSPITAL BILLS",
+          "payeeList": [
+            {
+              "payeeIdType": "FHIRID",
+              "payeeIdValue": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+              "amount": 100,
+              "currency": "INR"
+            }
+          ]
+        }
+
+    DisbursementResponse:
+      title: DisbursementResponse
+      type: object
+      required:
+        - disbursementId
+        - payeeList
+      properties:
+        disbursementId: 
+          type: string
+          example: f2957f7a-34c3-11ed-a261-0242ac120002
+        payeeResults:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/IndividualPayeeResult'
+      description: Data model for Disbursement Response
+  
+    DisbursementCheckResponse:
+      title: DisbursementCheckResponse
+      type: object
+      required:
+        - requestId
+        - payeeList
+      properties:
+        requestId: 
+          type: string
+          example: f2957f7a-34c3-11ed-a261-0242ac120002
+        payeeResults:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/IndividualPayeeCheckResult'
+      description: Data model for Disbursement Check Response
+
+    IndividualPayeeCheck:
+      title: IndividualPayeeCheck
+      type: object
+      description: Data model for the complex type IndividualPayeeCheck.
+      properties:
+        payeeIdType: 
+          type: string
+          example: AADHAAR
+        payeeIdValue: 
+          type: string
+          example: 5000-0000-1234
+      required:
+        - payeeIdType
+        - payeeIdValue
+  
+    IndividualPayee:
+      title: IndividualPayee
+      type: object
+      description: Data model for the complex type IndividualPayee.
+      properties:
+        payeeIdType: 
+          description: The type of payee identifier.
+          type: string
+          example: AADHAAR
+        payeeIdValue: 
+          description: The value of the payee identifier.
+          type: string
+          example: 5000-0000-1234
+        amount:
+          type: string
+          description: >-
+            The API data type Amount is a JSON String in a canonical format that is
+            restricted by a regular expression for interoperability reasons. This pattern
+            does not allow any trailing zeroes at all, but allows an amount without a
+            minor currency unit. It also only allows four digits in the minor currency
+            unit; a negative value is not allowed. Using more than 18 digits in the major
+            currency unit is not allowed.
+          pattern: '^([0]|([1-9][0-9]{0,17}))([.][0-9]{0,3}[1-9])?$'
+          example: '100'
+        currency:
+          description: ISO 4217 alphabetical currency code of the amount.
+          type: string
+          example: INR
+          minLength: 3
+          maxLength: 3
+          enum:
+            - AED
+            - AFN
+            - ALL
+            - AMD
+            - ANG
+            - AOA
+            - ARS
+            - AUD
+            - AWG
+            - AZN
+            - BAM
+            - BBD
+            - BDT
+            - BGN
+            - BHD
+            - BIF
+            - BMD
+            - BND
+            - BOB
+            - BRL
+            - BSD
+            - BTN
+            - BWP
+            - BYN
+            - BZD
+            - CAD
+            - CDF
+            - CHF
+            - CLP
+            - CNY
+            - COP
+            - CRC
+            - CUC
+            - CUP
+            - CVE
+            - CZK
+            - DJF
+            - DKK
+            - DOP
+            - DZD
+            - EGP
+            - ERN
+            - ETB
+            - EUR
+            - FJD
+            - FKP
+            - GBP
+            - GEL
+            - GGP
+            - GHS
+            - GIP
+            - GMD
+            - GNF
+            - GTQ
+            - GYD
+            - HKD
+            - HNL
+            - HRK
+            - HTG
+            - HUF
+            - IDR
+            - ILS
+            - IMP
+            - INR
+            - IQD
+            - IRR
+            - ISK
+            - JEP
+            - JMD
+            - JOD
+            - JPY
+            - KES
+            - KGS
+            - KHR
+            - KMF
+            - KPW
+            - KRW
+            - KWD
+            - KYD
+            - KZT
+            - LAK
+            - LBP
+            - LKR
+            - LRD
+            - LSL
+            - LYD
+            - MAD
+            - MDL
+            - MGA
+            - MKD
+            - MMK
+            - MNT
+            - MOP
+            - MRO
+            - MUR
+            - MVR
+            - MWK
+            - MXN
+            - MYR
+            - MZN
+            - NAD
+            - NGN
+            - NIO
+            - NOK
+            - NPR
+            - NZD
+            - OMR
+            - PAB
+            - PEN
+            - PGK
+            - PHP
+            - PKR
+            - PLN
+            - PYG
+            - QAR
+            - RON
+            - RSD
+            - RUB
+            - RWF
+            - SAR
+            - SBD
+            - SCR
+            - SDG
+            - SEK
+            - SGD
+            - SHP
+            - SLL
+            - SOS
+            - SPL
+            - SRD
+            - STD
+            - SVC
+            - SYP
+            - SZL
+            - THB
+            - TJS
+            - TMT
+            - TND
+            - TOP
+            - TRY
+            - TTD
+            - TVD
+            - TWD
+            - TZS
+            - UAH
+            - UGX
+            - USD
+            - UYU
+            - UZS
+            - VEF
+            - VND
+            - VUV
+            - WST
+            - XAF
+            - XCD
+            - XDR
+            - XOF
+            - XPF
+            - XTS
+            - XXX
+            - YER
+            - ZAR
+            - ZMW
+            - ZWD
+      required:
+        - payeeIdType
+        - payeeIdValue
+        - amount
+        - currency
+    IndividualPayeeResult:
+      title: IndividualPayeeResult
+      type: object
+      description: Data model for the complex type IndividualPayeeResult.
+      allOf:
+        - $ref: '#/components/schemas/IndividualPayee'
+        - type: object
+          properties:
+            timestamp:
+              description: The timestamp of the transfer fulfilment.
+              type: string
+              example: 2012-04-23T18:25:43.511Z
+            status: 
+              type: string
+              description: Status of the payment.
+              enum:
+              - RECEIVED
+              - PENDING
+              - COMPLETED
+              - REJECTED
+              - ABORETED
+            amountDebited:
+              type: string
+              description: >-
+                Amount debited from payer account, the API data type Amount is a JSON String in a canonical format that is
+                restricted by a regular expression for interoperability reasons. This pattern
+                does not allow any trailing zeroes at all, but allows an amount without a
+                minor currency unit. It also only allows four digits in the minor currency
+                unit; a negative value is not allowed. Using more than 18 digits in the major
+                currency unit is not allowed.
+              pattern: '^([0]|([1-9][0-9]{0,17}))([.][0-9]{0,3}[1-9])?$'
+              example: '100'
+            amountCredited: 
+              type: string
+              description: >-
+                Amount credited to payee account, the API data type Amount is a JSON String in a canonical format that is
+                restricted by a regular expression for interoperability reasons. This pattern
+                does not allow any trailing zeroes at all, but allows an amount without a
+                minor currency unit. It also only allows four digits in the minor currency
+                unit; a negative value is not allowed. Using more than 18 digits in the major
+                currency unit is not allowed.
+              pattern: '^([0]|([1-9][0-9]{0,17}))([.][0-9]{0,3}[1-9])?$'
+              example: '100'
+            errors:
+              type: array
+              items:
+                type: string
+                description: error description.
+      required:
+        - payeeIdType
+        - payeeIdValue
+        - amount
+        - currency
+        - amountDebited
+        - amountCredited
+    IndividualPayeeCheckResult:
+      title: IndividualPayeeCheckResult
+      type: object
+      description: Data model for the complex type IndividualPayeeResult.
+      allOf:
+        - $ref: '#/components/schemas/IndividualPayeeCheck'
+        - type: object
+          properties:
+            isPayable: 
+              type: boolean
+              example: true
+            timestamp:
+              type: string
+              example: 2012-04-23T18:25:43.511Z
+            name: 
+              type: string
+              description: Name of the benificiery.
+            dateOfBirth: 
+              type: string
+              description: Date of birth of the benificiery.
+            errors:
+              type: array
+              items:
+                type: string
+                description: error description.
+          required:
+            - isPayable
+
+      required:
+        - payeeIdType
+        - payeeIdValue

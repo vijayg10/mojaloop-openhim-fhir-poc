@@ -1,0 +1,9 @@
+{
+  "MOJALOOP_3PP_CONNECTION_INFO" : [
+    {
+      "pispId": "GovtBankA",
+      "endpoint": "http://thirdparty-core-connector:3003"
+    }
+  ],
+  "REQUEST_TIMEOUT" : 2000
+}
