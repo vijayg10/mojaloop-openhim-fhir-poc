@@ -5,6 +5,18 @@ networks:
     name: fhir-poc-net
 
 services:
+  payments-interoperability-layer-3pp-poc:
+    image: payments-interoperability-layer-3pp-poc:local
+    build:
+      context: ./payments-interoperability-layer-3pp-poc
+    networks:
+      - fhir-poc-net
+    container_name: payments-interoperability-layer-3pp-poc
+    volumes:
+      - "./payments-interoperability-layer-3pp-poc/config:/opt/app/dist/config"
+    ports:
+      - "3001:3001"
+
   ## Third-party transfer related services
   inbound-thirdparty-sdk:
     image: "mojaloop/thirdparty-sdk:v12.0.2"

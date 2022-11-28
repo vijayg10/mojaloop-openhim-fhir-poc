@@ -1,7 +1,7 @@
 {
-  "name": "payments-interoperability-layer",
+  "name": "payments-interoperability-layer-3pp",
   "version": "0.0.1",
-  "description": "Payments Interoperability Layer PoC Service",
+  "description": "Payments Interoperability Layer PoC Service using Third-Party payments",
   "main": "build/index.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.build.json; rm -rf dist/src/pil-api-adapter/interface; cp -R src/pil-api-adapter/interface dist/src/pil-api-adapter/interface; cp -R src/pil-api-adapter/server/static-files dist/src/pil-api-adapter/server/static-files; cp -R config dist/config;",
