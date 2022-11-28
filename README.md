@@ -2,12 +2,13 @@
 
 This is to demo a third party transfer using the following components
 - OpenHIM
-- FHIR-Mojaloop OpenHIM Mediator
+- FHIR-PIL OpenHIM Mediator
+- Payments Interoperability Layer
 - PISP payment manager
 - Mojaloop Testing Toolkit
 
 ### Technical Architecture
-![Technical Architecture Diagram](assets/images/fhir-invoice-pisp-poc.png)
+![Technical Architecture Diagram](assets/diagrams/fhir-invoice-pisp-poc.drawio.svg)
 
 ### Deployment Instructions
 
@@ -38,7 +39,7 @@ That's it, all the services are deployed.
 ### Making a transfer and monitor the logs
 - Execute the following HTTP request either from command line or from postman.
 ```
-  curl --location --request POST 'http://localhost:15001/fhir-mojaloop/sendmoney/fhir4-invoice' --header 'Content-Type: application/json' --data-raw '{
+  curl --location --request POST 'http://localhost:15001/fhir-pil/sendmoney/fhir4-invoice' --header 'Content-Type: application/json' --data-raw '{
   "resourceType": "Invoice",
   "id": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1",
   "identifier": [

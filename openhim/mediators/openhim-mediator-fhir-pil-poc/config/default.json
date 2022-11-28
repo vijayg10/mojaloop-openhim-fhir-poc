@@ -1,0 +1,56 @@
+{
+  "PORT": 3000,
+  "HOST": "0.0.0.0",
+  "CORS_WHITELIST": [
+    "http://localhost:3000",
+    "http://localhost:3010",
+    "http://localhost:3012",
+    "http://localhost:8080",
+    "http://localhost:8081"
+  ],
+  "ALLOW_CREDENTIALS": false,
+  "OPENHIM_CONFIG": {
+    "username": "root@openhim.org",
+    "password": "123456",
+    "apiURL": "https://openhim-core:8080",
+    "trustSelfSigned": true
+  },
+  "OPENHIM_REGISTER" : "",
+  "MEDIATOR_CONFIG" : {
+    "urn": "urn:mediator:fhir-pil",
+    "version": "0.0.1",
+    "name": "openhim-mediator-fhir-pil-poc",
+    "description": "Payment Interoperability Layer FHIR Mediator",
+    "defaultChannelConfig": [
+      {
+        "name": "Payment Interoperability Layer FHIR Mediator",
+        "urlPattern": "^/fhir-pil",
+        "authType": "public",
+        "routes": [
+          {
+            "name": "Payment Interoperability Layer FHIR Mediator Route",
+            "host": "openhim-mediator-fhir-pil-poc",
+            "path": "/health",
+            "port": "3000",
+            "primary": true,
+            "type": "http"
+          }
+        ],
+        "allow": ["admin"],
+        "methods": ["GET", "POST"],
+        "type": "http"
+      }
+    ],
+    "endpoints": [
+      {
+        "name": "Payment Interoperability Layer FHIR Mediator Endpoint",
+        "host": "openhim-mediator-fhir-pil-poc",
+        "path": "/health",
+        "port": "3000",
+        "primary": true,
+        "type": "http"
+      }
+    ]
+  },
+  "PIL_ENDPOINT": "http://payments-interoperability-layer-3pp-poc:3001"
+}

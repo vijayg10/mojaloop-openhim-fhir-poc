@@ -1,0 +1,16 @@
+{
+  "PAYEE_RESOLUTION_MAP": [
+    {
+      "payeeIdType": "FHIRID",
+      "payeeIdValue": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+      "paymentExecutionSystem": "MOJALOOP-3PP",
+      "paymentExecutionSystemInfo": {
+        "pispId": "GovtBankA",
+        "payerIdType": "ACCOUNT_ID",
+        "payerIdValue": "GOV/00001234",
+        "payeeIdType": "MSISDN",
+        "payeeIdValue": "987654321"
+      }
+    }
+  ]
+}

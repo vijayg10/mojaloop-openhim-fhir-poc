@@ -1,0 +1,139 @@
+{
+  "name": "payments-interoperability-layer-3pp",
+  "version": "0.0.1",
+  "description": "Payments Interoperability Layer PoC Service using Third-Party payments",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.build.json; rm -rf dist/src/pil-api-adapter/interface; cp -R src/pil-api-adapter/interface dist/src/pil-api-adapter/interface; cp -R src/pil-api-adapter/server/static-files dist/src/pil-api-adapter/server/static-files; cp -R config dist/config;",
+    "watch": "npx tsc -w",
+    "clean": "rm -rf dist node_modules",
+    "start": "npm run start:no-build",
+    "start:no-build": "node dist/src/index.js",
+    "start:build": "npm run build && npm run start:no-build",
+    "startDev": "ts-node -r tsconfig-paths/register -P ./tsconfig.json src/index.ts",
+    "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "lint": "eslint ./src/**/*.ts *.js",
+    "lint:fix": "eslint --fix ./src/**/*.ts *.js",
+    "test": "npm run test:unit",
+    "test:coverage": "jest --coverage --coverageThreshold='{}' --testMatch '**/test/unit/**/*.(test|spec).ts'",
+    "test:coverage-check": "jest -w 1 --coverage --testMatch '**/test/unit/**/*.(test|spec).ts'",
+    "test:integration": "jest --testMatch '**/test/integration/**/*.(test|spec).ts' --runInBand",
+    "test:junit": "jest --reporters=default --reporters=jest-junit",
+    "test:unit": "jest -w 1 --testMatch '**/test/unit/**/*.(test|spec).ts'",
+    "audit:resolve": "SHELL=sh resolve-audit --production",
+    "audit:check": "SHELL=sh check-audit --production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sp-convergence/mojaloop-g2p-poc-demo.git"
+  },
+  "author": "Vijaya Kumar Guthi <vijaya.guthi@modusbox.com>",
+  "contributors": [
+    "Vijaya Kumar Guthi <vijaya.guthi@modusbox.com>"
+  ],
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/sp-convergence/mojaloop-g2p-poc-demo/issues"
+  },
+  "homepage": "https://github.com/sp-convergence/mojaloop-g2p-poc-demo#readme",
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": true,
+    "useTabs": false,
+    "bracketSpacing": true,
+    "arrowParens": "avoid"
+  },
+  "pre-commit": [
+    "lint",
+    "updates:check",
+    "audit:check",
+    "test"
+  ],
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/inert": "^6.0.4",
+    "@hapi/vision": "^6.1.0",
+    "@mojaloop/central-services-error-handling": "11.3.0",
+    "@mojaloop/central-services-logger": "10.6.2",
+    "@mojaloop/central-services-metrics": "11.0.0",
+    "@mojaloop/central-services-shared": "^15.1.0",
+    "@mojaloop/event-sdk": "10.7.1",
+    "ajv": "8.10.0",
+    "ajv-keywords": "5.1.0",
+    "assert": "^2.0.0",
+    "axios": "^0.26.1",
+    "openhim-mediator-utils": "^0.2.4",
+    "parse-strings-in-object": "^1.4.0",
+    "rc": "^1.2.8",
+    "redis": "^3.1.2",
+    "typescript": "^4.2.3"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/hapi__hapi": "^20.0.9",
+    "@types/hapi__inert": "^5.2.3",
+    "@types/hapi__vision": "^5.5.3",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.10.1",
+    "@types/rc": "^1.2.0",
+    "@types/redis": "^2.8.32",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-cucumber": "^1.4.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "jest": "^27.2.2",
+    "jest-junit": "^12.3.0",
+    "jest-mock-process": "^1.4.1",
+    "nodemon": "^2.0.19",
+    "npm-audit-resolver": "^2.3.1",
+    "npm-check-updates": "^11.8.5",
+    "prettier": "^2.3.0",
+    "ts-jest": "^27.0.5",
+    "ts-node": "^10.1.0",
+    "tsconfig-paths": "^3.11.0"
+  },
+  "peerDependencies": {
+    "@mojaloop/central-services-error-handling": "11.3.0",
+    "@mojaloop/central-services-logger": "10.6.2",
+    "@mojaloop/central-services-metrics": "11.0.0",
+    "@mojaloop/event-sdk": "10.7.1",
+    "ajv": "8.10.0",
+    "ajv-keywords": "5.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@mojaloop/central-services-error-handling": {
+      "optional": false
+    },
+    "@mojaloop/central-services-logger": {
+      "optional": false
+    },
+    "@mojaloop/central-services-metrics": {
+      "optional": false
+    },
+    "@mojaloop/event-sdk": {
+      "optional": false
+    },
+    "ajv": {
+      "optional": false
+    },
+    "ajv-keyboards": {
+      "optional": false
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "multi",
+  "test_cases": [
+    {
+      "id": 1,
+      "name": "G2P Disbursement",
+      "fileInfo": {
+        "path": "/g2p"
+      },
+      "requests": [
+        {
+          "id": 1,
+          "description": "Post /disbursement",
+          "apiVersion": {
+            "minorVersion": 1,
+            "majorVersion": 0,
+            "type": "payment-multiplexer",
+            "specFile": "spec_files/api_definitions/payment-multiplexer_0.1/api_spec.yaml",
+            "callbackMapFile": "spec_files/api_definitions/payment-multiplexer_0.1/callback_map.json",
+            "responseMapFile": "spec_files/api_definitions/payment-multiplexer_0.1/response_map.json",
+            "jsfRefFile": "spec_files/api_definitions/payment-multiplexer_0.1/mockRef.json",
+            "triggerTemplatesFolder": "spec_files/api_definitions/payment-multiplexer_0.1/trigger_templates"
+          },
+          "operationPath": "/disbursement",
+          "path": "/disbursement",
+          "method": "post",
+          "body": {
+            "disbursementId": "f2957f7a-34c3-11ed-a261-0242ac120002",
+            "payerName": "PENSION",
+            "payeeList": [
+              {
+                "payeeIdType": "MSISDN",
+                "payeeIdValue": "9876543210",
+                "amount": 2000,
+                "currency": "INR"
+              },
+              {
+                "payeeIdType": "MSISDN",
+                "payeeIdValue": "8765432101",
+                "amount": 3000,
+                "currency": "INR"
+              }
+            ]
+          },
+          "url": "http://172.17.0.1:3001"
+        }
+      ]
+    }
+  ]
+}

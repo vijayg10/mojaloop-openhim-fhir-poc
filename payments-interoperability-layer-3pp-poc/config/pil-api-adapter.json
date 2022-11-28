@@ -1,0 +1,12 @@
+{
+  "LISTEN_PORT": 3001,
+  "HOST": "0.0.0.0",
+  "CORS_WHITELIST": [
+    "http://localhost:3000",
+    "http://localhost:3010",
+    "http://localhost:3012",
+    "http://localhost:8080",
+    "http://localhost:8081"
+  ],
+  "ALLOW_CREDENTIALS": false
+}

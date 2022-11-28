@@ -1,0 +1,329 @@
+openapi: 3.0.2
+info:
+  title: FHIR Payments Interoperability Layer Mediator
+  version: '1.0'
+  description: >-
+    An API to post FHIR invoices to trigger a transfer using Payments Interoperability Layer
+  license:
+    name: TBD
+    url: TBD
+servers:
+  - url: /
+paths:
+  /health:
+    get:
+      operationId: HealthGet
+      summary: Health check endpoint
+      description: >-
+        The HTTP request GET /health is used to return the current status of the
+        API.
+      tags:
+        - health
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+
+  /sendmoney/fhir4-invoice:
+    post:
+      operationId: SendMoneyFHIR4Invoice
+      description: >-
+        This request is used initiate a transfer in Payments Interoperability Layer using FHIR4 invoice.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FHIR4Invoice'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '406':
+          $ref: '#/components/responses/406'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+
+components:
+  responses:
+    '200':
+      description: OK
+    '400':
+      description: Bad Request
+    '401':
+      description: Unauthorized
+    '403':
+      description: Forbidden
+    '404':
+      description: Not Found
+    '405':
+      description: Method Not Allowed
+    '406':
+      description: Not Acceptable
+    '501':
+      description: Not Implemented
+    '503':
+      description: Service Unavailable
+
+
+  headers:
+    Content-Length:
+      required: false
+      schema:
+        type: integer
+      description: >-
+        The `Content-Length` header field indicates the anticipated size of the
+        payload body. Only sent if there is a body.
+
+
+        **Note:** The API supports a maximum size of 5242880 bytes (5
+        Megabytes).
+    Content-Type:
+      schema:
+        type: string
+      required: true
+      description: >-
+        The `Content-Type` header indicates the specific version of the API used
+        to send the payload body.
+  schemas:
+    FHIR4Invoice:
+      title: FHIR4Invoice
+      type: object
+      required:
+        - id
+        - resourceType
+      properties:
+        resourceType: 
+          type: string
+          example: Invoice
+        id: 
+          type: string
+          example: example
+        text: 
+          type: object
+          properties: 
+            status: 
+              type: string
+              example: generated
+            div: 
+              type: string
+              example: <div xmlns=http://www.w3.org/1999/xhtml>Example of Invoice</div>
+        identifier: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              system: 
+                type: string
+                example: http://myHospital.org/Invoices
+              value: 
+                type: string
+                example: 654321
+        status: 
+          type: string
+          example: issued
+        subject: 
+          type: object
+          properties: 
+            reference: 
+              type: string
+              example: Patient/example
+        date: 
+          type: string
+          example: "2017-01-25T08:00:00+01:00"
+        participant: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              role: 
+                type: object
+                properties: 
+                  coding: 
+                    type: array
+                    items: 
+                      type: object
+                      properties: 
+                        system: 
+                          type: string
+                          example: http://snomed.info/sct
+                        code: 
+                          type: string
+                          example: 17561000
+                        display: 
+                          type: string
+                          example: Cardiologist
+              actor: 
+                type: object
+                properties: 
+                  reference: 
+                    type: string
+                    example: Practitioner/example
+        issuer: 
+          type: object
+          properties: 
+            identifier: 
+              type: object
+              properties: 
+                system: 
+                  type: string
+                  example: http://myhospital/NamingSystem/departments
+                value: 
+                  type: string
+                  example: CARD_INTERMEDIATE_CARE
+        account: 
+          type: object
+          properties: 
+            reference: 
+              type: string
+              example: Account/example
+        totalNet: 
+          type: object
+          properties: 
+            value: 
+              type: integer
+              example: 40
+            currency: 
+              type: string
+              example: EUR
+        totalGross: 
+          type: object
+          properties: 
+            value: 
+              type: integer
+              example: 48
+            currency: 
+              type: string
+              example: EUR
+
+      description: Data model for FHIR4 Invoice.
+      example:
+        {
+          "resourceType": "Invoice",
+          "id": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1",
+          "identifier": [
+              {
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "UUID"
+                          }
+                      ]
+                  },
+                  "value": "b88e5a38-35ad-4d8c-aad3-44b4ace8c0b1"
+              },
+              {
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "Code"
+                          }
+                      ]
+                  },
+                  "value": "IV-UC-8156989548-105"
+              }
+          ],
+          "status": "active",
+          "type": {
+              "coding": [
+                  {
+                      "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-type",
+                      "code": "policy",
+                      "display": "Policy"
+                  }
+              ]
+          },
+          "recipient": {
+              "reference": "Patient/D944AFE5-F1A9-45D1-BE82-7BE28719A7E1",
+              "type": "Patient",
+              "identifier": [{
+                  "type": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/openimis-identifiers",
+                              "code": "UUID"
+                          }
+                      ]
+                  },
+                  "value": "D944AFE5-F1A9-45D1-BE82-7BE28719A7E1"
+              }]
+          },
+          "date": "2022-04-22",
+          "lineItem": [
+              {
+                  "chargeItemCodeableConcept": {
+                      "coding": [
+                          {
+                              "system": "https://openimis.github.io/openimis_fhir_r4_ig/CodeSystem/bill-charge-item",
+                              "code": "policy",
+                              "display": "Policy"
+                          }
+                      ]
+                  },
+                  "priceComponent": [
+                      {
+                          "extension": [
+                              {
+                                  "url": "https://openimis.github.io/openimis_fhir_r4_ig//StructureDefinition/unit-price",
+                                  "valueMoney": {
+                                      "value": 2390.0,
+                                      "currency": "USD"
+                                  }
+                              }
+                          ],
+                          "type": "base",
+                          "code": {
+                              "coding": [
+                                  {
+                                      "system": "Code",
+                                      "code": "Code",
+                                      "display": "IV-UC-8156989548-105"
+                                  }
+                              ]
+                          },
+                          "factor": 1.0,
+                          "amount": {
+                              "value": 2390.0,
+                              "currency": "USD"
+                          }
+                      }
+                  ]
+              }
+          ],
+          "totalNet": {
+              "value": 2390.0,
+              "currency": "USD"
+          },
+          "totalGross": {
+              "value": 2390.0,
+              "currency": "USD"
+          }
+        }
