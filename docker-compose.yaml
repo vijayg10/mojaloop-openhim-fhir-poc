@@ -21,6 +21,7 @@ services:
   inbound-thirdparty-sdk:
     image: "mojaloop/thirdparty-sdk:v12.0.2"
     command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js inbound-thirdparty-sdk && NODE_ENV=integration npm run start:inbound"
+    user: root
     volumes:
       - ./thirdparty-sdk/docker/wait4:/opt/thirdparty-sdk/wait4
     environment:
@@ -43,6 +44,7 @@ services:
   outbound-thirdparty-sdk:
     image: "mojaloop/thirdparty-sdk:v12.0.2"
     command: sh -c "/opt/thirdparty-sdk/wait4/wait4.js outbound-thirdparty-sdk && NODE_ENV=integration npm run start:outbound"
+    user: root
     volumes:
       - ./thirdparty-sdk/docker/wait4:/opt/thirdparty-sdk/wait4
     environment:
@@ -66,6 +68,7 @@ services:
   sdk-scheme-adapter:
     image: "mojaloop/sdk-scheme-adapter:v12.0.0"
     env_file: ./thirdparty-sdk/docker/sdk_scheme_adapter.env
+    user: root
     volumes:
       - "./thirdparty-sdk/docker/secrets:/secrets"
       - "./thirdparty-sdk/docker/jwsVerificationKeys:/jwsVerificationKeys"
@@ -89,6 +92,7 @@ services:
 
   ml-testing-toolkit:
     image: mojaloop/ml-testing-toolkit:v13.5.0
+    user: root
     volumes:
       - "./thirdparty-sdk/docker/contract/ml-testing-toolkit/spec_files:/opt/mojaloop-testing-toolkit/spec_files"
       - "./thirdparty-sdk/docker/contract/ml-testing-toolkit/secrets:/opt/mojaloop-testing-toolkit/secrets"
