@@ -149,3 +149,30 @@ That's it, all the services are deployed.
 - Goto "Transaction Log" and you can find the transaction there.
 - You can check various requests and response in TTK UI http://localhost:16060
 - You should see the incoming notification in payee mobile app simulator
+
+----
+## Developer Onboarding
+
+For running the application locally using node for development purposes, please follow the below guidelines.
+
+### Prerequisites
+- git
+- nvm
+- node version v16.15.0 (Installed with nvm)
+
+### Running typescript application
+
+- Clone this repository
+- Open a terminal application and go to the directory `payments-interoperability-layer-3pp-poc`
+- Set the correct nodejs version by running the following command
+  ```
+  nvm use
+  ```
+- If you get any error setting the node version, execute the following 
+  ```
+  nvm install v16.15.0
+  ```
+- Install dependent packages using the command `npm install`
+- Run the application in developer mode by using `npm run dev`
+
+**_Note: To make end-to-end flow working is tricky without using docker, because you need to setup the hostnames and ports in various component configurations._**
